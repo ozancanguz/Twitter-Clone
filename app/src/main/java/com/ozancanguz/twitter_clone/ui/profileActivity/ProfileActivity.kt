@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -12,6 +13,8 @@ import com.ozancanguz.twitter_clone.R
 import com.ozancanguz.twitter_clone.databinding.ActivityProfileBinding
 import com.ozancanguz.twitter_clone.databinding.ActivitySignUpBinding
 import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_USERS
+import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_USER_EMAIL
+import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_USER_USERNAME
 import com.ozancanguz.twitter_clone.firebaseDB.User
 import com.ozancanguz.twitter_clone.ui.login.LoginActivity
 
@@ -36,7 +39,8 @@ class ProfileActivity : AppCompatActivity() {
         // sign out
         signout()
 
-
+        // apply
+           apply()
         // populate info
         populateInformations()
     }
@@ -49,8 +53,6 @@ class ProfileActivity : AppCompatActivity() {
                  binding.profileusername.setText(user?.username, TextView.BufferType.EDITABLE)
                 binding.profileEmail.setText(user?.email,TextView.BufferType.EDITABLE)
 
-
-
             }
             .addOnFailureListener {
                 it.printStackTrace()
@@ -62,6 +64,24 @@ class ProfileActivity : AppCompatActivity() {
             auth.signOut()
             val intent= Intent(this@ProfileActivity,LoginActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    private fun apply(){
+        binding.applybtn.setOnClickListener {
+            val username=binding.profileusername.text.toString()
+            val email=binding.profileEmail.text.toString()
+            val map=HashMap<String,Any>()
+            map[DATA_USER_USERNAME]=username
+            map[DATA_USER_EMAIL]=email
+            firebaseDb.collection(DATA_USERS).document(userId!!).update(map)
+                .addOnSuccessListener {
+                    Toast.makeText(this@ProfileActivity,"Succesfully updated",Toast.LENGTH_LONG).show()
+                      finish()
+                }.addOnFailureListener {
+                    Toast.makeText(this,"update failed",Toast.LENGTH_LONG).show()
+                    it.printStackTrace()
+                }
         }
     }
 
