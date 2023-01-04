@@ -1,6 +1,8 @@
 package com.ozancanguz.twitter_clone.ui.profileActivity
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -13,8 +15,10 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ozancanguz.twitter_clone.R
 import com.ozancanguz.twitter_clone.databinding.ActivityProfileBinding
 import com.ozancanguz.twitter_clone.databinding.ActivitySignUpBinding
+import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_IMAGES
 import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_USERS
 import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_USER_EMAIL
+import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_USER_IMAGE_URL
 import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_USER_USERNAME
 import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.REQUEST_CODE_PHOTO
 import com.ozancanguz.twitter_clone.firebaseDB.User
@@ -66,7 +70,7 @@ class ProfileActivity : AppCompatActivity() {
                  binding.profileusername.setText(user?.username, TextView.BufferType.EDITABLE)
                 binding.profileEmail.setText(user?.email,TextView.BufferType.EDITABLE)
                 imageUrl?.let {
-                    binding.profileImg.loadUrl(user?.imageUrl,R.drawable.defaultt)
+                    binding.profileImg.loadUrl(user?.imageUrl,R.drawable.ozifoto)
                 }
 
             }
@@ -100,6 +104,43 @@ class ProfileActivity : AppCompatActivity() {
                 }
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PHOTO) {
+            storeImage(data?.data)
+        }
+    }
+    fun storeImage(imageUri: Uri?) {
+        imageUri?.let {
+            Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show()
+
+            val filePath = firebaseStorage.child(DATA_IMAGES).child(userId!!)
+            filePath.putFile(imageUri)
+                .addOnSuccessListener {
+                    filePath.downloadUrl
+                        .addOnSuccessListener {uri ->
+                            val url = uri.toString()
+                            firebaseDb.collection(DATA_USERS).document(userId).update(DATA_USER_IMAGE_URL, url)
+                                .addOnSuccessListener {
+                                    imageUrl = url
+                                    binding.profileImg.loadUrl(imageUrl, R.drawable.defaultt)
+                                }
+                        }
+                        .addOnFailureListener {
+                            onUploadFailure()
+                        }
+                }
+                .addOnFailureListener {
+                    onUploadFailure()
+                }
+        }
+    }
+    fun onUploadFailure() {
+        Toast.makeText(this, "Image upload failed. Please try again later.", Toast.LENGTH_SHORT).show()
+
+    }
+
 
 
 }

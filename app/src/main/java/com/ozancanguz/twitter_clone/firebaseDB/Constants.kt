@@ -11,6 +11,8 @@ class Constants {
         val DATA_USER_HASTAGS = "followHashtags"
         val DATA_USER_FOLLOW = "followUsers"
         val REQUEST_CODE_PHOTO=345
+        val DATA_IMAGES = "ProfileImages"
+
 
 
     }
