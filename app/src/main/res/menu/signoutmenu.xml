@@ -7,5 +7,5 @@
         android:id="@+id/signOutMenu"
         app:showAsAction="ifRoom"
         android:title="SignOut"
-        android:icon="@drawable/img" />
+        android:icon="@drawable/signoutmenu" />
 </menu>

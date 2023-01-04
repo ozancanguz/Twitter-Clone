@@ -24,6 +24,7 @@ import com.ozancanguz.twitter_clone.ui.fragments.HomeFragment
 import com.ozancanguz.twitter_clone.ui.fragments.MyActivityFragment
 import com.ozancanguz.twitter_clone.ui.fragments.SearchFragment
 import com.ozancanguz.twitter_clone.ui.login.LoginActivity
+import com.ozancanguz.twitter_clone.ui.profileActivity.ProfileActivity
 import kotlinx.android.synthetic.main.activity_home_screen.*
 
 class HomeScreen : AppCompatActivity() {
@@ -31,7 +32,6 @@ class HomeScreen : AppCompatActivity() {
     private lateinit var binding: ActivityHomeScreenBinding
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var navController: NavController
 
     lateinit var bottomNav : BottomNavigationView
 
@@ -70,6 +70,10 @@ class HomeScreen : AppCompatActivity() {
         }
 
 
+        binding.logo.setOnClickListener {
+            val intent=Intent(this@HomeScreen,ProfileActivity::class.java)
+            startActivity(intent)
+        }
 
     }
     fun loadFragment(fragment: Fragment){
@@ -90,7 +94,6 @@ class HomeScreen : AppCompatActivity() {
             auth.signOut()
             val intent= Intent(this, LoginActivity::class.java)
             startActivity(intent)
-
         }
 
         return super.onOptionsItemSelected(item)
