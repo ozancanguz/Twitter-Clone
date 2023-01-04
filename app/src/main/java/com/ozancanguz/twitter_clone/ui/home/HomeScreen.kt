@@ -1,5 +1,6 @@
 package com.ozancanguz.twitter_clone.ui.home
 
+import android.content.ClipData.newIntent
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,15 +17,19 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.ozancanguz.twitter_clone.R
 import com.ozancanguz.twitter_clone.databinding.ActivityHomeScreenBinding
 import com.ozancanguz.twitter_clone.databinding.ActivityLoginBinding
+import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_USERS
+import com.ozancanguz.twitter_clone.firebaseDB.User
 import com.ozancanguz.twitter_clone.ui.fragments.HomeFragment
 import com.ozancanguz.twitter_clone.ui.fragments.MyActivityFragment
 import com.ozancanguz.twitter_clone.ui.fragments.SearchFragment
 import com.ozancanguz.twitter_clone.ui.login.LoginActivity
 import com.ozancanguz.twitter_clone.ui.profileActivity.ProfileActivity
+import com.ozancanguz.twitter_clone.util.loadUrl
 import kotlinx.android.synthetic.main.activity_home_screen.*
 
 class HomeScreen : AppCompatActivity() {
@@ -34,6 +39,12 @@ class HomeScreen : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
     lateinit var bottomNav : BottomNavigationView
+
+
+    private val firebaseDB = FirebaseFirestore.getInstance()
+
+    private var user: User? = null
+    private var userId = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +110,32 @@ class HomeScreen : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onResume() {
+        super.onResume()
+        userId = FirebaseAuth.getInstance().currentUser?.uid
+        if(userId == null) {
+           val intent=Intent(this@HomeScreen,LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            populate()
+        }
+    }
+    fun populate() {
 
+        firebaseDB.collection(DATA_USERS).document(userId!!).get()
+            .addOnSuccessListener { documentSnapshot ->
+
+                user = documentSnapshot.toObject(User::class.java)
+                user?.imageUrl?.let {
+                    logo.loadUrl(it, R.drawable.ozifoto)
+                }
+
+            }
+            .addOnFailureListener { e ->
+                e.printStackTrace()
+                finish()
+            }
+    }
 
 }
