@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.ozancanguz.twitter_clone.R
 import com.ozancanguz.twitter_clone.databinding.ActivityLoginBinding
@@ -18,6 +19,8 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
 
     private lateinit var auth: FirebaseAuth
+
+    private val firebaseDb=FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
