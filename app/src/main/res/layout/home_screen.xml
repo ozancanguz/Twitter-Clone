@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/homescreen"
     tools:context=".ui.home.HomeScreen">
 
 
@@ -12,14 +11,11 @@
         android:id="@+id/fav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="116dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="92dp"
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.923"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
-        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@android:drawable/ic_input_add" />
 
     <androidx.cardview.widget.CardView
@@ -59,7 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/standard_image"
-            android:paddingLeft="@dimen/grid_3x" />
+            android:paddingLeft="@dimen/grid_3x"
+            android:text="Home" />
 
 
         <androidx.cardview.widget.CardView
@@ -69,7 +66,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="60dp"
             android:layout_marginLeft="60dp"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:cardCornerRadius="@dimen/standard_corner_radius"
             tools:visibility="visible">
 
@@ -94,16 +91,33 @@
 
     </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="414dp"
-        android:layout_height="63dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/standard_height"
+        android:layout_marginBottom="@dimen/grid_2x"
+        app:tabIndicator="@null"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/home"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/search"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabMyActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/activity"/>
+    </com.google.android.material.tabs.TabLayout>
+
 
 
 
