@@ -12,6 +12,7 @@ import com.google.firebase.ktx.Firebase
 import com.ozancanguz.twitter_clone.R
 import com.ozancanguz.twitter_clone.databinding.ActivityLoginBinding
 import com.ozancanguz.twitter_clone.ui.home.HomeScreen
+import com.ozancanguz.twitter_clone.ui.signup.SignUpActivity
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -35,7 +36,15 @@ class LoginActivity : AppCompatActivity() {
         // login with user
         signIn()
 
+        // go to create account screen
+        binding.signUpTextview.setOnClickListener {
+            val intent=Intent(this,SignUpActivity::class.java)
+            startActivity(intent)
+        }
+
     }
+
+
 
 
     private fun signIn() {
