@@ -10,11 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TwitterClone">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.login.LoginActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar"
-            android:windowSoftInputMode="adjustResize"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
