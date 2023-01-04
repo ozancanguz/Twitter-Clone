@@ -128,7 +128,7 @@ class HomeScreen : AppCompatActivity() {
 
                 user = documentSnapshot.toObject(User::class.java)
                 user?.imageUrl?.let {
-                    logo.loadUrl(it, R.drawable.ozifoto)
+                    logo.loadUrl(it, R.drawable.defaultt)
                 }
 
             }
