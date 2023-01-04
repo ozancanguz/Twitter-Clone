@@ -9,14 +9,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.ozancanguz.twitter_clone.R
 import com.ozancanguz.twitter_clone.databinding.ActivityProfileBinding
 import com.ozancanguz.twitter_clone.databinding.ActivitySignUpBinding
 import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_USERS
 import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_USER_EMAIL
 import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_USER_USERNAME
+import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.REQUEST_CODE_PHOTO
 import com.ozancanguz.twitter_clone.firebaseDB.User
 import com.ozancanguz.twitter_clone.ui.login.LoginActivity
+import com.ozancanguz.twitter_clone.util.loadUrl
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -24,6 +27,9 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private val firebaseDb=FirebaseFirestore.getInstance()
     private val userId=FirebaseAuth.getInstance().currentUser?.uid
+    private val firebaseStorage=FirebaseStorage.getInstance().reference
+    private var imageUrl:String?=null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +49,13 @@ class ProfileActivity : AppCompatActivity() {
            apply()
         // populate info
         populateInformations()
+
+
+        binding.profileImg.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, REQUEST_CODE_PHOTO)
+        }
     }
 
     private fun populateInformations() {
@@ -52,6 +65,9 @@ class ProfileActivity : AppCompatActivity() {
                 val user=it.toObject(User::class.java)
                  binding.profileusername.setText(user?.username, TextView.BufferType.EDITABLE)
                 binding.profileEmail.setText(user?.email,TextView.BufferType.EDITABLE)
+                imageUrl?.let {
+                    binding.profileImg.loadUrl(user?.imageUrl,R.drawable.defaultt)
+                }
 
             }
             .addOnFailureListener {

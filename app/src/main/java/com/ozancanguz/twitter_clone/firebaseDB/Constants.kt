@@ -10,6 +10,7 @@ class Constants {
         val DATA_USER_IMAGE_URL = "imageUrl"
         val DATA_USER_HASTAGS = "followHashtags"
         val DATA_USER_FOLLOW = "followUsers"
+        val REQUEST_CODE_PHOTO=345
 
 
     }
