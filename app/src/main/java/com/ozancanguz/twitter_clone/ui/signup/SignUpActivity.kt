@@ -12,6 +12,8 @@ import com.google.firebase.ktx.Firebase
 import com.ozancanguz.twitter_clone.R
 import com.ozancanguz.twitter_clone.databinding.ActivityLoginBinding
 import com.ozancanguz.twitter_clone.databinding.ActivitySignUpBinding
+import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_USERS
+import com.ozancanguz.twitter_clone.firebaseDB.User
 import com.ozancanguz.twitter_clone.ui.home.HomeScreen
 
 class SignUpActivity : AppCompatActivity() {
@@ -45,6 +47,7 @@ class SignUpActivity : AppCompatActivity() {
         binding.signUpBtn.setOnClickListener {
             val email = binding.SignUpemailET.text.toString()
             val password = binding.SignUpPassword.text.toString()
+            val username=binding.SignUpuserNameET.text.toString()
 
             if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this@SignUpActivity,"E-mail or password empty",Toast.LENGTH_LONG).show()
@@ -52,6 +55,13 @@ class SignUpActivity : AppCompatActivity() {
 
                 auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
 
+
+                    // save user into db
+                  val user=User(email,username,"", arrayListOf(), arrayListOf())
+                    firebaseDb.collection(DATA_USERS).document(auth.uid!!).set(user)
+
+
+                    // go to sign up screen
                     val intent= Intent(this@SignUpActivity,HomeScreen::class.java)
                     startActivity(intent)
 
