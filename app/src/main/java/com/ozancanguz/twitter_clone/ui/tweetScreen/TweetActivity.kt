@@ -1,7 +1,9 @@
 package com.ozancanguz.twitter_clone.ui.tweetScreen
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -10,9 +12,12 @@ import com.google.firebase.storage.FirebaseStorage
 import com.ozancanguz.twitter_clone.R
 import com.ozancanguz.twitter_clone.databinding.ActivitySignUpBinding
 import com.ozancanguz.twitter_clone.databinding.ActivityTweetBinding
+import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_IMAGES
 import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_TWEETS
 import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.REQUEST_CODE_PHOTO
 import com.ozancanguz.twitter_clone.firebaseDB.Tweet
+import com.ozancanguz.twitter_clone.util.loadUrl
+import kotlinx.android.synthetic.main.activity_tweet.*
 
 class TweetActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTweetBinding
@@ -39,7 +44,10 @@ class TweetActivity : AppCompatActivity() {
             finish()
         }
 
+        // POST TWEET
         postTweet()
+        // SELECT IMAGE
+        addImage()
     }
 
     companion object{
@@ -56,6 +64,40 @@ class TweetActivity : AppCompatActivity() {
 
 
     fun addImage(){
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, REQUEST_CODE_PHOTO)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_PHOTO) {
+            storeImage(data?.data)
+        }
+    }
+    fun storeImage(imageUri: Uri?) {
+        imageUri?.let {
+            Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show()
+            val filePath = firebaseStorage.child(DATA_IMAGES).child(userId!!)
+            filePath.putFile(imageUri)
+                .addOnSuccessListener {
+                    filePath.downloadUrl
+                        .addOnSuccessListener {uri ->
+                            imageUrl = uri.toString()
+                            tweetImage.loadUrl(imageUrl, R.drawable.defaultt)
+
+                        }
+                        .addOnFailureListener {
+                            onUploadFailure()
+                        }
+                }
+                .addOnFailureListener {
+                    onUploadFailure()
+                }
+        }
+    }
+    fun onUploadFailure() {
+        Toast.makeText(this, "Image upload failed. Please try agail later.", Toast.LENGTH_SHORT).show()
 
     }
 
