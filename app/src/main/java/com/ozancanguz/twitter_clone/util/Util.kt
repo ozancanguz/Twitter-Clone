@@ -30,3 +30,11 @@ fun progressDrawable(context: Context): CircularProgressDrawable {
         start()
     }
 }
+
+fun getDate(s: Long?): String {
+    s?.let {
+        val df = DateFormat.getDateInstance()
+        return df.format(Date(it))
+    }
+    return "Unknown"
+}
