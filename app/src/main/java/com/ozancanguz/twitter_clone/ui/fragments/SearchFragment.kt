@@ -24,6 +24,9 @@ class SearchFragment : Fragment() {
         val view = binding.root
 
 
+
+
+
         return view
     }
 
