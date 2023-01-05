@@ -7,6 +7,7 @@ import android.os.Bundle
 import com.ozancanguz.twitter_clone.R
 import com.ozancanguz.twitter_clone.databinding.ActivitySignUpBinding
 import com.ozancanguz.twitter_clone.databinding.ActivityTweetBinding
+import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.REQUEST_CODE_PHOTO
 
 class TweetActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTweetBinding
@@ -31,6 +32,11 @@ class TweetActivity : AppCompatActivity() {
             intent.putExtra(PARAM_USER_NAME, userName)
             return intent
         }
+    }
+
+
+    fun addImage(){
+
     }
 
 
