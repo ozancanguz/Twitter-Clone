@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TwitterClone">
         <activity
+            android:name=".ui.tweetScreen.TweetActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.profileActivity.ProfileActivity"
             android:exported="false" />
         <activity

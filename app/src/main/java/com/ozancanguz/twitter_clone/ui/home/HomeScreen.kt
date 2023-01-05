@@ -29,6 +29,7 @@ import com.ozancanguz.twitter_clone.ui.fragments.MyActivityFragment
 import com.ozancanguz.twitter_clone.ui.fragments.SearchFragment
 import com.ozancanguz.twitter_clone.ui.login.LoginActivity
 import com.ozancanguz.twitter_clone.ui.profileActivity.ProfileActivity
+import com.ozancanguz.twitter_clone.ui.tweetScreen.TweetActivity
 import com.ozancanguz.twitter_clone.util.loadUrl
 import kotlinx.android.synthetic.main.activity_home_screen.*
 
@@ -85,6 +86,14 @@ class HomeScreen : AppCompatActivity() {
             val intent=Intent(this@HomeScreen,ProfileActivity::class.java)
             startActivity(intent)
         }
+
+
+        // intent to tweet activity
+        binding.fab.setOnClickListener {
+        startActivity(TweetActivity.newIntent(this,userId,user?.username))
+
+        }
+
 
     }
     fun loadFragment(fragment: Fragment){
