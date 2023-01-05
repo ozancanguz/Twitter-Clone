@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
@@ -24,6 +25,7 @@ import com.ozancanguz.twitter_clone.databinding.ActivityHomeScreenBinding
 import com.ozancanguz.twitter_clone.databinding.ActivityLoginBinding
 import com.ozancanguz.twitter_clone.firebaseDB.Constants.Companion.DATA_USERS
 import com.ozancanguz.twitter_clone.firebaseDB.User
+import com.ozancanguz.twitter_clone.ui.adapters.TweetListAdapter
 import com.ozancanguz.twitter_clone.ui.fragments.HomeFragment
 import com.ozancanguz.twitter_clone.ui.fragments.MyActivityFragment
 import com.ozancanguz.twitter_clone.ui.fragments.SearchFragment
@@ -46,6 +48,8 @@ class HomeScreen : AppCompatActivity() {
 
     private var user: User? = null
     private var userId = FirebaseAuth.getInstance().currentUser?.uid
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +97,15 @@ class HomeScreen : AppCompatActivity() {
         startActivity(TweetActivity.newIntent(this,userId,user?.username))
 
         }
+
+/*
+        search.setOnEditorActionListener { v, actionId, event ->
+            if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) {
+                SearchFragment.newHashtag(v?.text.toString())
+            }
+            true
+        }
+        */
 
 
     }
